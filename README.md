@@ -1,2 +1,11 @@
 # minorgrad
-A simple deep learning framework that can train a nnet on MNIST with autograd, Adam optimizer.
+Heavily based on [karpathy/micrograd](https://github.com/karpathy/micrograd) and [geohot/tinygrad](https://github.com/geohot/tinygrad), implementing some add-ons for educational purposes only
+![image](https://user-images.githubusercontent.com/67547213/197373261-1a1959fe-e647-4d67-8db2-964a6ccbbe10.png)
+### Installation
+
+```bash
+git clone https://github.com/aengusng8/minorgrad.git
+cd minorgrad
+```
+
+## 97% accuracy on MNIST?
