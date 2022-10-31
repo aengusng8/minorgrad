@@ -13,5 +13,12 @@ Heavily based on [karpathy/micrograd](https://github.com/karpathy/micrograd) and
 git clone https://github.com/aengusng8/minorgrad.git
 cd minorgrad
 ```
+## Correctness of the framework
+```bash
+python test/assert_allclose.py
+```
 
 ## 97% accuracy on MNIST?
+```bash
+python test/mnist.py
+```
