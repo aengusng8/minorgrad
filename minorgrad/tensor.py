@@ -32,18 +32,24 @@ class Tensor:
 
         assert self.grad is not None
 
-        grads = self._ctx.backward(self._ctx, self.grad)
+        # calculate gradients for its parents from itself
+        parent_grads = self._ctx.backward(self._ctx, self.grad)
+
         if len(self._ctx.parents) == 1:
-            grads = [grads]
-        for t, g in zip(self._ctx.parents, grads):
-            if g.shape != t.data.shape:
+            parent_grads = [parent_grads]
+
+        assert len(parent_grads) == len(self._ctx.parents)
+
+        # assign the gradients to the parents, and recurse
+        for parent_grad, parent in zip(parent_grads, self._ctx.parents):
+            if parent_grad.shape != parent.data.shape:
                 print(
-                    "grad shape must match tensor shape in %r, %r != %r"
-                    % (self._ctx, g.shape, t.data.shape)
+                    f"grad shape must match tensor shape in {self._ctx}, {parent_grad.shape} != {parent.data.shape}"
                 )
                 assert False
-            t.grad = g
-            t.backward(False)
+
+            parent.grad = parent_grad
+            parent.backward(allow_fill=False)
 
     def mean(self):
         div = Tensor(np.array([1 / self.data.size]))
@@ -89,7 +95,7 @@ class Function:
     @staticmethod
     def backward(ctx, *grad_outputs):
         r"""Defines a formula for differentiating the operation with backward mode
-        automatic differentiation (alias to the vjp function).
+        automatic differentiation (calculate gradients for its parents from itself).
 
         This function is to be overridden by all subclasses.
         """
